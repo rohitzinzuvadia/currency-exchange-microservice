@@ -17,11 +17,20 @@ pipeline{
 			   echo "BUILD_TAG - $env.BUILD_TAG"
             }
         }
-		stage("Build Code"){
+		stage("Compile"){
              steps{
-               sh 'mvn clean package -DskipTest=True'
+               sh 'mvn clean compile'
             }
-            
+        }
+        stage("Test"){
+             steps{
+               sh 'mvn test'
+            }
+        }
+        stage("Integration Test"){
+             steps{
+               sh 'mvn failsafe:integrstion-test failsafe:verify'
+            }
         }
         
 		
