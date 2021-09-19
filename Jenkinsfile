@@ -34,12 +34,19 @@ pipeline{
         }
         stage("Build Image"){
              steps{
-               //sh 'docker build -t rohit34zinzuvadia/currency-exchange:$env.BUILD_TAG'
                script{
                     dockerImage = docker.build("rohit34zinzuvadia/currency-exchange:$env.BUILD_TAG")
                 }
             }
-            
+        }
+        stage("Push Image"){
+             steps{
+               script{
+                   docker.withRegistry('','dockerHub'){
+                       dockerImage.push()
+                   }
+                }
+            }
         }
         
         
