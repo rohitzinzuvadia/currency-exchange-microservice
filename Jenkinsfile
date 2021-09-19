@@ -1,8 +1,38 @@
-node {
-	stage('Build') {
-		echo "Build"
-	}
-	stage('Test') {
-		echo "Test"
-	}
+pipeline{
+    agent any
+    environment{
+        dockerHome = tools 'myDocker'
+        mavenHome = tools 'myMaven'
+        PATH = "$dockerHome/bin:$mavenHome/bin:$PATH"
+    }
+    stages{
+        stage("Check Version"){
+            steps{
+               sh 'mvn --version'
+               sh 'docker --version'
+			   echo "Build"
+			   echo "BUILD_NUMBER - $env.BUILD_NUMBER"
+			   echo "BUILD_ID - $env.BUILD_ID"
+			   echo "JOB_NAME - $env.JOB_NAME"
+			   echo "BUILD_TAG - $env.BUILD_TAG"
+            }
+        }
+		stage("Build Code"){
+            steps{
+               sh 'mvn clean package'
+            }
+        }
+		
+    }
+    post{
+        always{
+            echo "========always========"
+        }
+        success{
+            echo "========pipeline executed successfully ========"
+        }
+        failure{
+            echo "========pipeline execution failed========"
+        }
+    }
 }
