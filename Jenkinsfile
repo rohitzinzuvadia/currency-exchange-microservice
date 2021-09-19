@@ -18,10 +18,12 @@ pipeline{
             }
         }
 		stage("Build Code"){
-            steps{
-               sh 'mvn clean package'
+             steps{
+               sh 'mvn clean package -DskipTest=True'
             }
+            
         }
+        
 		
     }
     post{
