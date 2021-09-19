@@ -27,11 +27,21 @@ pipeline{
                sh 'mvn test'
             }
         }
-        stage("Integration Test"){
+        stage("Package"){
              steps{
-               sh 'mvn failsafe:integrstion-test failsafe:verify'
+               sh 'mvn clean package -DskipTest=True'
             }
         }
+        stage("Build Image"){
+             steps{
+               //sh 'docker build -t rohit34zinzuvadia/currency-exchange:$env.BUILD_TAG'
+               script{
+                    dockerImage = docker.build("rohit34zinzuvadia/currency-exchange:$env.BUILD_TAG")
+                }
+            }
+            
+        }
+        
         
 		
     }
