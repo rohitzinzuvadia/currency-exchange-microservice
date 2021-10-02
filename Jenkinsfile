@@ -22,6 +22,16 @@ pipeline{
                sh 'mvn clean package -DskipTest=True'
             }
         }
+        stage("Test"){
+             steps{
+               sh 'mvn test'
+            }
+        }
+        stage("Integration Test"){
+             steps{
+               sh 'mvn failsafe:integration-test failsafe:verify'
+            }
+        }
         stage("Build Image"){
              steps{
                script{
